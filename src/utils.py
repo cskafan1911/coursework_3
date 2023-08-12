@@ -60,12 +60,23 @@ def edited_the_information_from_the_transfer(direction):
     return edited_direction
 
 
+def formatted_the_date(date):
+    """
+    Получает дату в формате '%Y-%m-%d %H:%M:%S.%f' и переводит в формат '%d.%m.%Y'
+    :param date: Дата из списка операции
+    :return: Отформатированную дату
+    """
+    date_formatted = datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y')
+
+    return date_formatted
+
+
 def formatted_the_operation(operation):
     """
     Получает операцию и форматирует ее для итогового вывода на экран
     :return:Отформатированную операцию
     """
-    date_formatted = datetime.strptime(operation['date'], '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y')
+    date_formatted = formatted_the_date(operation['date'])
     description = operation['description']
     from_ = operation.get('from')
     to_ = operation.get('to')
