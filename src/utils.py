@@ -66,7 +66,8 @@ def formatted_the_date(date):
     :param date: Дата из списка операции
     :return: Отформатированную дату
     """
-    date_formatted = datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y')
+    #date_formatted = datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f').strftime('%d.%m.%Y')
+    date_formatted = datetime.fromisoformat(date).strftime('%d.%m.%Y')
 
     return date_formatted
 
@@ -86,3 +87,21 @@ def formatted_the_operation(operation):
     transfer_currency = operation['operationAmount']['currency']['name']
 
     return f"{date_formatted} {description}\n{edited_from_} -> {edited_to_}\n{transfer_amount} {transfer_currency}\n"
+
+
+def get_executed_only(operations, quantity):
+    """
+    Получает отсортированный по дате список и выводит список удачных операций
+    :param operations: отсортированные по дате операции
+    :param quantity: количество операций которые нужно вывести
+    :return: Удачные операций
+    """
+    executed_operations = []
+
+    for operation in operations:
+        if operation['state'] == 'EXECUTED':
+            executed_operations.append(operation)
+            if len(executed_operations) == quantity:
+                break
+
+    return executed_operations
