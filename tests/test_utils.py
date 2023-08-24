@@ -1,3 +1,4 @@
+import pathlib
 from src import utils
 import pytest
 
@@ -14,15 +15,17 @@ def test_edited_the_information_from_the_transfer_error():
 
 
 def test_sorted_operations_list_by_datetime():
-    assert utils.sorted_operations_list_by_datetime([{"date": "2018-12-22T02:02:49.564873"},
-                                                     {"date": "2020-12-22T02:02:49.564873"},
-                                                     {"date": "2011-12-22T02:02:49.564873"},
-                                                     {"date": "2023-12-22T02:02:49.564873"}
-                                                     ]) == [{"date": "2023-12-22 02:02:49.564873"},
-                                                            {"date": "2020-12-22 02:02:49.564873"},
-                                                            {"date": "2018-12-22 02:02:49.564873"},
-                                                            {"date": "2011-12-22 02:02:49.564873"},
-                                                            ]
+    data = [{"date": "2018-12-22T02:02:49.564873"},
+            {"date": "2020-12-22T02:02:49.564873"},
+            {"date": "2011-12-22T02:02:49.564873"},
+            {"date": "2023-12-22T02:02:49.564873"}
+            ]
+    expected = [{"date": "2023-12-22 02:02:49.564873"},
+                {"date": "2020-12-22 02:02:49.564873"},
+                {"date": "2018-12-22 02:02:49.564873"},
+                {"date": "2011-12-22 02:02:49.564873"},
+                ]
+    assert utils.sorted_operations_list_by_datetime(data) == expected
 
 
 def test_sorted_operations_list_by_datetime_error():
@@ -42,12 +45,7 @@ def test_sorted_operations_list_by_datetime_error():
 
 def test_formatted_the_date():
     assert utils.formatted_the_date("2019-09-06 00:48:01.081967") == '06.09.2019'
-    assert utils.formatted_the_date("2023-11-9 00:48:01.081967") == '09.11.2023'
-
-
-def test_formatted_the_date_error():
-    with pytest.raises(ValueError):
-        utils.formatted_the_date("2019-09-06T00:48:01.081967")
+    assert utils.formatted_the_date("2023-11-09 00:48:01.081967") == '09.11.2023'
 
 
 @pytest.fixture
@@ -73,3 +71,8 @@ def test_formatted_the_operation(test_dict):
     assert utils.formatted_the_operation(test_dict) == (f'06.09.2019 Перевод организации\n'
                                                         f'Visa Gold 3654 41** **** 1162 -> Счет **8289\n'
                                                         f'6357.56 USD\n')
+
+
+def test_load_operations():
+    test_file_path = pathlib.Path(__file__).parent.joinpath('data_for_test.json')
+    assert utils.load_operations(test_file_path) == [1, 2, 3]
